@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title></title>
+<link href="./lib/css/bootstrap.css" rel="stylesheet" />
+<link href="./lib/css/bootstrap-theme.css" rel="stylesheet" />
+</head>
+<body ng-app="todoApp">
+  <div class="panel panel-default" ng-controller="TodoController">
+    <div class="panel-heading">
+      <h3 class="panel-title">Todo Application&nbsp;<span class="label label-info">{{(todos | filter: {completed: false}).length}}</span></h3>
+    </div>
+    <div class="panel-body">
+      <input type="text" ng-model="newTodo" ng-enter="addNew(newTodo)"><input
+        type="button" ng-click="addNew(newTodo)" value="Add" />
+    </div>
+    <div class="panel-body">
+      <div class="panel" ng-show="todos.length > 0">
+        <ul class="list-group">
+          <li ng-repeat="todo in todos" class="list-group-item"
+            ng-class="!todo.completed ? highlightTodo : ''"><input
+            type="checkbox" ng-model="todo.completed" />&nbsp;<label
+            ng-dblclick="editTodo(todo)" ng-hide="todo.edit">{{todo.description}}</label>
+            <input type="text" ng-enter="updateTodo(changedTodo)"
+            ng-model="changedTodo.description" ng-show="todo.edit"
+            ng-blur="revert(todo)" ng-escape="revert(todo)" 
+            todo-focus="todo.edit" />
+            <button class="destroy" ng-click="removeTodo(todo)"
+              style="float: right">x</button></li>
+        </ul>
+      </div>
+
+      <div class="panel" ng-hide="todos.length > 0">There are no
+        todos.</div>
+    </div>
+    <div class="panel-body">
+      Todos completed: {{(todos | filter:{completed:true}).length}}<br />
+      Todos left: {{(todos | filter:{completed:false}).length}}
+    </div>
+    <div class="panel-body">
+      <button ng-click="removeCompletedTodos()">Remove Completed
+        Todos</button>
+      <button ng-click="highlightPendingTodos(true)"
+        ng-hide="highlightTodo !== ''">Highlight Pending Todos</button>
+      <button ng-click="highlightPendingTodos(false)"
+        ng-hide="highlightTodo === ''">Remove Highlight Pending
+        Todos</button>
+    </div>
+  </div>
+</body>
+</html>
+<script src="./lib/js/angular.js"></script>
+<script>
+  var todoApp = angular.module("todoApp", []);
+
+  todoApp
+      .controller(
+          "TodoController",
+          [
+              '$scope',
+              '$filter',
+              '$timeout',
+              function($scope, $filter, $timeout) {
+                $scope.highlightTodo = '';
+                //$scope.editedTodo = {};
+                $scope.changedTodo = {};
+
+                $scope.todos = [ ];
+                /*
+                $scope.todos = [ {
+                  description : 'my first todo',
+                  completed : false,
+                  edit : false
+                }, {
+                  description : 'second todo',
+                  completed : false,
+                  edit : false
+                }, {
+                  description : '3 todo',
+                  completed : true,
+                  edit : false
+                } ];*/
+
+                $scope.addNew = function(newTodo) {
+                  if (newTodo) {
+                    $scope.todos.push({
+                      description : newTodo,
+                      completed : false
+                    });
+                    $scope.newTodo = "";
+                  }
+                };
+
+                $scope.removeCompletedTodos = function() {
+                  $scope.todos = $filter('filter')(
+                      $scope.todos, {
+                        completed : false
+                      });
+                };
+
+                $scope.highlightPendingTodos = function(status) {
+                  if (status) {
+                    $scope.highlightTodo = 'list-group-item-danger';
+                  } else {
+                    $scope.highlightTodo = '';
+                  }
+                };
+
+                $scope.removeTodo = function(todo) {
+                  $scope.todos.splice($scope.todos
+                      .indexOf(todo), 1);
+                };
+
+                $scope.editTodo = function(todo) {
+                  todo.edit = true;
+                  $scope.changedTodo = angular.copy(todo);
+                };
+
+                $scope.updateTodo = function(changeTodo) {
+                  for (var i = 0; i < $scope.todos.length; i++) {
+                    if (  $scope.todos[i].edit) {
+                      $scope.todos[i] = changeTodo;
+                      $scope.todos[i].edit = false;
+                      changeTodo = {};
+                      return;
+                    }
+                  }
+                };
+
+                $scope.revert = function(todo) {
+                  $scope.changedTodo = null;
+                  todo.edit = false;
+                };
+              } ]);
+
+  todoApp.directive("ngEnter", function() {
+    return function(scope, element, attr) {
+      element.bind("keypress", function(event) {
+        if (event.which === 13) {
+          scope.$apply(function() {
+            scope.$eval(attr.ngEnter);
+          });
+        }
+      });
+    };
+  });
+  
+  todoApp.directive("todoFocus", function($timeout) {
+    return function(scope, element, attrs) {
+      scope.$watch(attrs.todoFocus, function (newVal) {
+        if (newVal) {
+          $timeout(function () {
+            element[0].focus();
+          }, 0, false);
+        }
+      });
+    };
+  });
+</script>

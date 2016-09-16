@@ -1,0 +1,28 @@
+Electron Steps
+------------------------------------------------------------------------------------------------
+
+Pre-requistes
+--------------------------------
+1) Install Node.js
+
+
+Steps
+--------------------------------
+1. Create a directory. Each project should be in its own directory
+2. Go to the directory
+3. npm init -y : Command to create a package.json file. This creates a project description
+4. npm install electron --save-dev : Install electron with all its necessary prebuilt features to run a standalone application
+5. Open package.json and change main to "src/main.js". When the app starts this is the first file that is called. Create the folder src and file main.js if it does not exist.
+6. In package.json change the scripts section to add "start": "electron .". This tells that the npm command electron needs to be run from the current directory. If this does not work, type ".\node_modules\.bin\electron ." in the command line
+7. Execute npm start in the command prompt. It should work.
+
+Create EXE
+--------------------------------
+1. npm install electron-packager --save-dev
+2. Execute .\node_modules\.bin\electron-packager . --all 
+3. Only for windows - .\node_modules\.bin\electron-packager . --win32 
+
+References:
+- https://github.com/electron/electron
+- https://github.com/electron-userland/electron-packager#supported-platforms
+
