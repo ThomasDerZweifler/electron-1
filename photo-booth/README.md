@@ -10,7 +10,7 @@ This example is a Photo Booth app. It has the following features
 - Have multiple image filters
 - Creating a menu and actions
 
-This was created following one of the chapters in the Pluralsight Tutorial "Electron Fundamentals".
+This was created following one of the chapters in the Pluralsight Tutorial **_"Electron Fundamentals"_**
 
 ## Steps
 - Download the app
