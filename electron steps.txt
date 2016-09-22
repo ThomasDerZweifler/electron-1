@@ -22,6 +22,17 @@ Create EXE
 2. Execute .\node_modules\.bin\electron-packager . --all 
 3. Only for windows - .\node_modules\.bin\electron-packager . --win32 
 
+OR 
+1. npm install electron-packager rimraf -D
+3. electron-packager . --platform=darwin,win32,linux --arch-x64 --icon=app
+   - create a a package for Mac, windows, linux with 64 bit architecture using app.* as its icon
+   - Icon extension for:
+		- window: .icon
+		- mac: .icns
+		- linux: .png
+3. .\node_modules\.bin\electron-packager . --out=dist/osx --platform=darwin --arch=x64
+   - you can specify an output directory using --out
+
 References:
 - https://github.com/electron/electron
 - https://github.com/electron-userland/electron-packager#supported-platforms
@@ -32,3 +43,7 @@ Install Steps
 - Go inside the project and execute: node install
 - To launch the app: .\node_modules\.bin\electron .
 - To package the app: .\node_modules\.bin\electron-packager . --all
+
+
+npm run build
+ConEmu
