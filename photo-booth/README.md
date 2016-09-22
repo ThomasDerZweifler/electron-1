@@ -14,7 +14,7 @@ This was created following one of the chapters in the Pluralsight Tutorial "Elec
 
 ## Steps
 - Download the app
-- Go to the desired folder and run npm-install
+- Go to the desired folder and run npm install
 - npm start will lauch the app
 - npm run build will create the necessary files for launching as an app
 
